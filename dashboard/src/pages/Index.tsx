@@ -5,7 +5,11 @@ import Header from "@/components/Header";
 const Index = () => {
   return (
     <div className="min-h-screen bg-gray-50 flex flex-col">
-      <Header />
+      <header className="w-full bg-white py-3 px-6 shadow-sm border-b">
+        <div className="max-w-7xl mx-auto flex justify-between items-center ml-0">
+          <Logo />
+        </div>
+      </header>
       {/* Main Content */}
       <main className="flex-grow flex flex-col items-center justify-center p-6">
         <div className="max-w-3xl w-full mx-auto text-center flex flex-col items-center justify-center">
