@@ -29,6 +29,7 @@ import {
 } from "@/components/ui/select";
 import { NotificationsPopover } from "@/components/NotificationsPopover";
 import Header from "@/components/Header";
+import Sidebar from "@/components/Sidebar";
 
 const StudentManagement = () => {
   const navigate = useNavigate();
@@ -167,38 +168,21 @@ const StudentManagement = () => {
 
       <div className="flex flex-1">
         {/* Sidebar */}
-        <aside className="w-48 bg-gray-100">
-          <nav className="py-4">
-            <ul className="space-y-1">
-              <li
-                className="px-4 py-2 text-gray-600 hover:bg-gray-200 cursor-pointer"
-                onClick={() => navigate("/dashboard")}
-              >
-                Trainer Dashboard
-              </li>
-              <li
-                className="px-4 py-2 bg-blue-200 text-blue-700 font-medium cursor-pointer"
-                onClick={() => navigate("/student-management")}
-              >
-                Student Management
-              </li>
-            </ul>
-          </nav>
-        </aside>
+        <Sidebar />
 
         {/* Main content */}
         <main className="flex-1 bg-blue-400/50 p-4">
           <div className="max-w-7xl mx-auto">
             <div className="flex justify-between items-center mb-6">
               <h2 className="text-2xl font-bold text-gray-800">
-                Student Management
+                Employee Management
               </h2>
               <Button
                 onClick={handleAddStudent}
                 className="bg-white text-black hover:bg-gray-100"
               >
                 <UserCog className="mr-2 h-4 w-4" />
-                Add Student
+                Add Employee
               </Button>
             </div>
 
@@ -275,10 +259,10 @@ const StudentManagement = () => {
         <DialogContent className="sm:max-w-[800px] max-h-[90vh] overflow-y-auto">
           <DialogHeader>
             <DialogTitle className="text-xl text-blue-600 font-bold">
-              Add New Student
+              Add New Employee
             </DialogTitle>
             <p className="text-gray-500 text-sm mt-1">
-              Add a new student to the system
+              Add a new employee to the system
             </p>
           </DialogHeader>
 
@@ -418,21 +402,14 @@ const StudentManagement = () => {
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
                   <Label htmlFor="contactNumber">
-                    Contact Number of the Student
+                    Contact Number of the Employee
                   </Label>
-                  <Select
+                  <Input
+                    id="contactNumber"
                     value={contactNumber}
-                    onValueChange={setContactNumber}
-                  >
-                    <SelectTrigger id="contactNumber" className="mt-1">
-                      <SelectValue placeholder="Select contact number" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="0771234567">0771234567</SelectItem>
-                      <SelectItem value="0701234567">0701234567</SelectItem>
-                      <SelectItem value="0761234567">0761234567</SelectItem>
-                    </SelectContent>
-                  </Select>
+                    onChange={(e) => setContactNumber(e.target.value)}
+                    className="mt-1"
+                  />
                 </div>
                 <div>
                   <Label htmlFor="guardianContactNumber">

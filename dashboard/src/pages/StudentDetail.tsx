@@ -1,7 +1,4 @@
-import React from "react";
 import { useParams, Link } from "react-router-dom";
-import { Bell } from "lucide-react";
-import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Card } from "@/components/ui/card";
 import {
   Table,
@@ -21,7 +18,7 @@ import {
   ResponsiveContainer,
 } from "recharts";
 import Header from "@/components/Header";
-
+import Sidebar from "@/components/Sidebar";
 // Mock data for the attendance log
 const attendanceData = [
   { date: "2025-02-20", checkIn: "8:00 AM", checkOut: "5:00 PM" },
@@ -80,14 +77,16 @@ const feedbacks = [
 ];
 
 const StudentDetail = () => {
-  const { id } = useParams();
+  const { id } = useParams(); // Get the id from the URL
 
-  // Mock student data (would normally come from an API)
-  const student = {
-    id: 1,
+  // Mock employee data (would normally come from an API)
+  const employee = {
+    id, // Use the id from the URL
     name: "Sampath Perera",
     employer: "ABC Textiles Ltd",
     photoUrl: "/user.jpg",
+    guardian_contact_no: "0771234567",
+    employer_contact_no: "0777654321",
   };
 
   return (
@@ -97,18 +96,7 @@ const StudentDetail = () => {
 
       <div className="flex flex-1">
         {/* Sidebar */}
-        <aside className="w-64 bg-white border-r border-gray-200">
-          <nav className="py-4">
-            <ul className="space-y-2">
-              <li className="px-4 py-2 bg-blue-100 text-blue-600 font-medium">
-                <Link to="/dashboard">Trainer Dashboard</Link>
-              </li>
-              <li className="px-4 py-2 text-gray-600 hover:bg-gray-100 cursor-pointer">
-                Student Management
-              </li>
-            </ul>
-          </nav>
-        </aside>
+        <Sidebar />
 
         {/* Main content */}
         <main className="flex-1 bg-gradient-to-b from-blue-300/30 to-blue-500/40 p-4">
@@ -131,20 +119,21 @@ const StudentDetail = () => {
               </div>
             </div>
 
-            {/* Student Profile */}
+            {/* Employee Profile */}
             <div className="flex mb-6">
               <div className="w-40 h-40 rounded-full overflow-hidden bg-gray-200">
                 <img
-                  src={student.photoUrl}
-                  alt={student.name}
+                  src={employee.photoUrl}
+                  alt={employee.name}
                   className="w-full h-full object-cover"
                 />
               </div>
               <div className="ml-6 flex flex-col justify-center">
-                <h3 className="text-xl font-semibold">{student.name}</h3>
-                <p className="text-gray-600">ID: {student.id}</p>
-                <p className="text-gray-600">Employer: {student.employer}</p>
+                <h3 className="text-xl font-semibold">{employee.name}</h3>
+                <p className="text-gray-600">ID: {employee.id}</p>
+                <p className="text-gray-600">Employer: {employee.employer}</p>
               </div>
+              <div className="ml-64 flex flex-col justify-center"></div>
             </div>
 
             <div className="grid grid-cols-2 gap-6">
