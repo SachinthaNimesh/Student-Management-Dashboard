@@ -1,6 +1,6 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { Search, Edit, UserCog, Upload } from "lucide-react";
+import { Search, Edit, UserCog, Upload, RotateCcw, UserX } from "lucide-react";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -27,12 +27,15 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { NotificationsPopover } from "@/components/NotificationsPopover";
 import Header from "@/components/Header";
 import Sidebar from "@/components/Sidebar";
+import { useEmployeeService } from "@/api/getEmployees";
+import { EmployeeResponse } from "@/types/employees";
 
 const StudentManagement = () => {
   const navigate = useNavigate();
+  const { getEmployees } = useEmployeeService();
+  const [employees, setEmployees] = useState<EmployeeResponse[]>([]);
   const [searchQuery, setSearchQuery] = useState("");
   const [isAddDialogOpen, setIsAddDialogOpen] = useState(false);
 
@@ -54,58 +57,26 @@ const StudentManagement = () => {
   const [trainer, setTrainer] = useState("");
   const [remarks, setRemarks] = useState("");
 
-  // Sample student data
-  const students = [
-    {
-      id: 1,
-      name: "Sampath Perera",
-      employer: "ABC Textiles Ltd",
-      trainer: "Dayan De Silva",
-    },
-    {
-      id: 2,
-      name: "Malini Silva",
-      employer: "XYZ Foods",
-      trainer: "Mohammed Aslam",
-    },
-    {
-      id: 3,
-      name: "Rajiv Kumar",
-      employer: "Cafe Ceylon Ltd",
-      trainer: "Ruwan Fernando",
-    },
-    {
-      id: 4,
-      name: "Asanka Bandara",
-      employer: "Yuki Ice Cream",
-      trainer: "Nalaka Rathnayaka",
-    },
-    {
-      id: 5,
-      name: "John Doe",
-      employer: "Green Gardens",
-      trainer: "Nimali Sirisena",
-    },
-  ];
+  useEffect(() => {
+    const fetchEmployees = async () => {
+      try {
+        const data = await getEmployees();
+        console.log("Fetched employees data:", data); // Log fetched data
+        setEmployees(data);
+      } catch (error) {
+        // Removed error log
+      }
+    };
 
-  // Sample data for dropdowns
-  const employers = [
-    "ABC Textiles Ltd",
-    "XYZ Foods",
-    "Cafe Ceylon Ltd",
-    "Yuki Ice Cream",
-    "Green Gardens",
-  ];
-  const trainers = [
-    "Dayan De Silva",
-    "Mohammed Aslam",
-    "Ruwan Fernando",
-    "Nalaka Rathnayaka",
-    "Nimali Sirisena",
-  ];
-  const genders = ["Male", "Female", "Other"];
+    fetchEmployees();
+  }, []);
 
-  const handleViewStudent = (id) => {
+  // Replace with placeholders or dynamic data fetching logic
+  const employers: any[] = []; // Replace with dynamic data fetching logic
+  const trainers: any[] = []; // Replace with dynamic data fetching logic
+  const genders: any[] = []; // Replace with dynamic data fetching logic
+
+  const handleViewStudent = (id: number) => {
     navigate(`/student/${id}`);
   };
 
@@ -113,7 +84,7 @@ const StudentManagement = () => {
     setIsAddDialogOpen(true);
   };
 
-  const handleSubmitStudent = (e) => {
+  const handleSubmitStudent = (e: { preventDefault: () => void }) => {
     e.preventDefault();
     // Here you would typically submit the form data to your backend
     console.log("Submitting student data:", {
@@ -198,55 +169,127 @@ const StudentManagement = () => {
             </div>
 
             {/* Student table */}
-            <div className="bg-white rounded-lg shadow-sm overflow-hidden">
-              <Table>
+            <div className="bg-white rounded-lg shadow-sm overflow-x-auto">
+              <Table className="table-auto w-full">
                 <TableHeader>
                   <TableRow className="bg-gray-50">
-                    <TableHead className="w-16 font-semibold text-gray-700">
-                      ID
+                    <TableHead className="font-semibold text-gray-700 w-24 whitespace-nowrap sticky left-0 bg-gray-50 z-10">
+                      STUDENT ID
                     </TableHead>
-                    <TableHead className="font-semibold text-gray-700">
+                    <TableHead className="font-semibold text-gray-700 w-32 whitespace-nowrap">
                       NAME
                     </TableHead>
-                    <TableHead className="font-semibold text-gray-700">
+                    <TableHead className="font-semibold text-gray-700 w-32 whitespace-nowrap">
+                      CONTACT NO
+                    </TableHead>
+                    <TableHead className="font-semibold text-gray-700 w-24 whitespace-nowrap">
+                      EMPLOYER ID
+                    </TableHead>
+                    <TableHead className="font-semibold text-gray-700 w-32 whitespace-nowrap">
                       EMPLOYER
                     </TableHead>
-                    <TableHead className="font-semibold text-gray-700">
-                      TRAINER
+                    <TableHead className="font-semibold text-gray-700 w-36 whitespace-nowrap">
+                      EMPLOYER CONTACT
                     </TableHead>
-                    <TableHead className="w-24 font-semibold text-gray-700">
+                    <TableHead className="font-semibold text-gray-700 w-40 whitespace-nowrap">
+                      EMPLOYER ADDRESS
+                    </TableHead>
+                    <TableHead className="font-semibold text-gray-700 w-28 whitespace-nowrap">
+                      SUPERVISOR ID
+                    </TableHead>
+                    <TableHead className="font-semibold text-gray-700 w-32 whitespace-nowrap">
+                      SUPERVISOR
+                    </TableHead>
+                    <TableHead className="font-semibold text-gray-700 w-28 whitespace-nowrap">
+                      LATEST OTP
+                    </TableHead>
+                    <TableHead className="font-semibold text-gray-700 w-32 whitespace-nowrap">
+                      EXPIRES AT
+                    </TableHead>
+                    <TableHead className="font-semibold text-gray-700 w-40 whitespace-nowrap">
                       ACTION
                     </TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
-                  {students.map((student) => (
-                    <TableRow key={student.id} className="hover:bg-gray-50">
-                      <TableCell className="font-medium">
-                        {student.id}
-                      </TableCell>
-                      <TableCell>{student.name}</TableCell>
-                      <TableCell>{student.employer}</TableCell>
-                      <TableCell>{student.trainer}</TableCell>
-                      <TableCell>
-                        <div className="flex space-x-2">
-                          <button
-                            onClick={() => handleViewStudent(student.id)}
-                            className="p-1 text-blue-600 hover:text-blue-800"
-                            title="Edit student"
-                          >
-                            <Edit className="h-5 w-5" />
-                          </button>
-                          <button
-                            className="p-1 text-blue-600 hover:text-blue-800"
-                            title="Manage student"
-                          >
-                            <UserCog className="h-5 w-5" />
-                          </button>
-                        </div>
+                  {employees.length === 0 ? (
+                    <TableRow>
+                      <TableCell
+                        colSpan={12}
+                        className="text-center text-gray-500"
+                      >
+                        Loading...
                       </TableCell>
                     </TableRow>
-                  ))}
+                  ) : (
+                    [...employees]
+                      .sort((a, b) => (a.student_id || 0) - (b.student_id || 0))
+                      .map((employee, index) => (
+                        <TableRow
+                          key={employee.student_id || index}
+                          className="hover:bg-gray-50 border-b border-gray-200"
+                        >
+                          <TableCell className="font-medium sticky left-0 bg-white z-10">
+                            {employee.student_id || "N/A"}
+                          </TableCell>
+                          <TableCell>
+                            {employee.student_name || "N/A"}
+                          </TableCell>
+                          <TableCell>
+                            {employee.student_contact || "N/A"}
+                          </TableCell>
+                          <TableCell>{employee.employer_id || "N/A"}</TableCell>
+                          <TableCell>
+                            {employee.employer_name || "N/A"}
+                          </TableCell>
+                          <TableCell>
+                            {employee.employer_contact || "N/A"}
+                          </TableCell>
+                          <TableCell>
+                            {employee.employer_address || "N/A"}
+                          </TableCell>
+                          <TableCell>
+                            {employee.supervisor_id || "N/A"}
+                          </TableCell>
+                          <TableCell>
+                            {employee.supervisor_name || "N/A"}
+                          </TableCell>
+                          <TableCell>
+                            {employee.latest_otp_code || "N/A"}
+                          </TableCell>
+                          <TableCell>
+                            {employee.expires_at
+                              ? new Date(employee.expires_at).toLocaleString()
+                              : "N/A"}
+                          </TableCell>
+                          <TableCell>
+                            <div className="flex space-x-1">
+                              <button
+                                className="p-1 bg-blue-100 rounded hover:bg-blue-200"
+                                title="Generate OTP"
+                              >
+                                <RotateCcw className="h-4 w-4 text-blue-600" />
+                              </button>
+                              <button
+                                onClick={() =>
+                                  handleViewStudent(employee.student_id)
+                                }
+                                className="p-1 bg-blue-100 rounded hover:bg-blue-200"
+                                title="Edit student"
+                              >
+                                <Edit className="h-4 w-4 text-blue-600" />
+                              </button>
+                              <button
+                                className="p-1 bg-blue-100 rounded hover:bg-blue-200"
+                                title="Delete student"
+                              >
+                                <UserX className="h-4 w-4 text-blue-600" />
+                              </button>
+                            </div>
+                          </TableCell>
+                        </TableRow>
+                      ))
+                  )}
                 </TableBody>
               </Table>
             </div>

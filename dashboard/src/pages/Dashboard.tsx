@@ -1,8 +1,8 @@
 import { useNavigate } from "react-router-dom";
 import Header from "@/components/Header";
 import Sidebar from "@/components/Sidebar";
-import { ChevronRight } from "lucide-react";
 import { useState, useEffect } from "react";
+import { ChevronRight } from "lucide-react";
 import { useCardService } from "../api/getCard";
 import { Card } from "../types/card";
 
@@ -37,7 +37,10 @@ const Dashboard = () => {
   // Sort employees by mood priority: sad > neutral > happy
   const sortedEmployees = [...employees].sort((a, b) => {
     const moodPriority = { sad: 1, neutral: 2, happy: 3 };
-    return (moodPriority[a.emotion] || 4) - (moodPriority[b.emotion] || 4);
+    return (
+      (moodPriority[a.emotion as keyof typeof moodPriority] || 4) -
+      (moodPriority[b.emotion as keyof typeof moodPriority] || 4)
+    );
   });
 
   return (
@@ -92,15 +95,24 @@ const Dashboard = () => {
 
 export default Dashboard;
 
-function EmployeeCard({ employee }) {
-  const [isExpanded, setIsExpanded] = useState(false);
+interface Employee {
+  id: number;
+  name: string;
+  employer: string;
+  status: string;
+  statusColor: string;
+  workingHours: string;
+  mood: string;
+}
+
+function EmployeeCard({ employee }: { employee: Employee }) {
   const navigate = useNavigate(); // Add useNavigate here
 
   const handleCardClick = () => {
     navigate(`/employee/${employee.id}`);
   };
 
-  const getMoodEmojiImage = (mood) => {
+  const getMoodEmojiImage = (mood: string) => {
     switch (mood) {
       case "happy":
         return "../Happy.png"; // Path to black-and-white happy emoji image
@@ -113,7 +125,7 @@ function EmployeeCard({ employee }) {
     }
   };
 
-  const getMoodStyle = (mood) => {
+  const getMoodStyle = (mood: string) => {
     switch (mood) {
       case "happy":
         return "fff"; //text-yellow-500
@@ -167,10 +179,7 @@ function EmployeeCard({ employee }) {
           </span>
         </div>
 
-        <button
-          className="flex items-center px-3 py-1 rounded-lg text-blue-600 hover:bg-blue-100 transition-colors text-sm font-medium focus:outline-none focus:ring-2 focus:ring-blue-300"
-          aria-expanded={isExpanded}
-        >
+        <button className="flex items-center px-3 py-1 rounded-lg text-blue-600 hover:bg-blue-100 transition-colors text-sm font-medium focus:outline-none focus:ring-2 focus:ring-blue-300">
           View Details
           <ChevronRight className="ml-1 w-4 h-4" />
         </button>

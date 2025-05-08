@@ -1,7 +1,5 @@
-import React from "react";
 import Logo from "@/components/Logo";
 import SignInButton from "@/components/SignInButton";
-import Header from "@/components/Header";
 const Index = () => {
   return (
     <div className="min-h-screen bg-gray-50 flex flex-col">
